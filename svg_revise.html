@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang ='en'>
+<head>
+	<meta chartset='utf-8'>
+	<title> D3 template</title>
+	<script type="text/javascript" src = "../d3/d3.js"></script>
+</head>
+<body>
+
+<!-- SVG Examples -->
+<svg width = '50' height = '50'>
+	<circle cx = '25' cy ='25' r = '22' fill = 'blue' stroke = 'gray' stroke-width ='2'/>
+</svg>
+
+
+
+<h3> Chapter 4 </h3>
+<script type="text/javascript">
+
+var dataset = [4,5,6,8,9]
+
+d3.select("body")
+  .append("p")
+  .text(" Adding new paragraph on chaining");
+
+//var csvDataset
+
+
+d3.select("body").selectAll("body")
+  .data(dataset)
+  .enter()
+  .append('p')
+  .text(function(d){return "Current element is " + d ;});
+
+d3.select("body")
+  .append("h3")
+  .text("Binding my 10th Marksheet using CSV :P ")
+
+d3.csv("dataset.csv", function(error , data){
+	d3.select("body").selectAll("body")
+  .data(data)
+  .enter()
+  .append('p')
+  .text(
+  	    function(d){return "subject " + d['Subject'] + ", Marks :" + d[' Marks']; }
+  	    )
+  .style("color",function(d)
+  	{ if(d[' Marks']>90){
+  		return "red";
+  	}else{ return "black";}
+
+  } 
+  	);
+});
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
