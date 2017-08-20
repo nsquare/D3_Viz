@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang ='en'>
+<head>
+	<meta chartset='utf-8'>
+	<title> D3 template</title>
+	<script type="text/javascript" src = "https://d3js.org/d3.v4.min.js"></script>
+	<style type="text/css">
+	div.bar{
+		display: inline-block;
+		width: 20px;
+		height: 75px;
+		background-color: teal;
+		margin-right: 2px;
+	}
+
+	rect.bar{
+		display: inline-block;
+		width: 20px;
+
+		background-color: teal;
+		margin-right: 2px;
+	}
+	</style>
+</head>
+<body>
+<h3> Chapter 6 Onwards </h3>
+
+<script type="text/javascript">
+var dataset = [];
+for( var i =0; i <25; i ++){
+	var newNum = Math.random()*30;
+	dataset.push(newNum)
+};
+
+d3.select("body")
+  .selectAll("div")
+  .data(dataset)
+  .enter()
+  .append("div")
+  .attr("class", "bar");
+
+d3.select("body")
+  .append("p")
+  .selectAll("p")
+  .data(dataset)
+  .enter()
+  .append("div")
+  .attr("class", "bar")
+  .style("height", function(d){return d*5 +"px"});
+
+
+
+</script>
+<p> The bar graph generated above was using div, now we will use svg</p>
+<script type="text/javascript">
+
+var dataset = [];
+for( var i =0; i <25; i ++){
+	var newNum = Math.random()*30;
+	dataset.push(newNum)
+};
+
+var w = 500;
+var h = 200;
+var barPadding =2;
+var svg1 = d3.select("body")
+            .append("svg")
+            .attr("height", h)
+            .attr("width", w);
+var svg2 = d3.select("body")
+            .append("svg")
+            .attr("height", h)
+            .attr("width", w);
+            
+svg1.style("background-color", "pink")
+   .selectAll("circle")
+   .data(dataset)
+   .enter()
+   .append("circle")
+   .attr("cx", function(d,i){
+    return i*2 + 25
+   }
+   	)
+   .attr("cy", function(d,i){
+   	return (h - d*20)}
+   	)
+   .attr("r", function(d,i){
+   	return d}
+   	);
+
+svg2.style("background-color", "pink")
+   .selectAll("rect")
+   .data(dataset)
+   .enter()
+   .append("rect")
+   .attr("x", function(d,i){
+    return i*w/dataset.length
+   }
+   	)
+   .attr("y", function(d,i){
+   	return (h - d*5)}
+   	)
+   .attr("width", function(d,i){
+   	return w/dataset.length - barPadding}
+   	)
+   .attr("height", function(d,i){
+   	return d*5}
+   	)
+   .attr("fill", function(d) { return "rgb(0, 0, " + Math.round(h- (d * 7)) + ")"; } )
+   ;
+   
+  svg2.selectAll("text")
+      .data(dataset)
+      .enter()
+      .append("text")
+      .text(function(d){return Math.round(d)})
+         .attr("x", function(d,i){
+    return i*w/dataset.length
+   }
+   	)
+   .attr("y", function(d,i){
+   	return (h - d*5)}
+   	);
+
+d3.select("body")
+  .append("h4")
+  .text("working on scales");
+
+
+
+
+</script>
+
+
+</body>
+
+
+
+
+
+
+
+
