@@ -20,6 +20,19 @@
 		background-color: teal;
 		margin-right: 2px;
 	}
+
+	.axis text{
+		font-family: sans-serif;
+		font-size: 11px;
+
+	}
+	.axis path,
+	.axis line{
+		fill : none;
+		stroke-rendering : crispEdges ;
+
+	}
+
 	</style>
 </head>
 <body>
@@ -126,7 +139,7 @@ svg2.style("background-color", "pink")
 
 d3.select("body")
   .append("h4")
-  .text("working on scales");
+  .text("working on scales and axes");
 
 var svg3 = d3.select("body")
             .append("svg")
@@ -146,7 +159,7 @@ var xScale = d3.scaleLinear()
          .range([svg3_padding,w - svg3_padding])
 
 var yScale = d3.scaleLinear()
-         .domain([d3.min(dataset_scatter, function(d){return d[1]}), d3.max(dataset_scatter, function(d){return d[1]}) ])
+         .domain([ d3.max(dataset_scatter, function(d){return d[1]}) , d3.min(dataset_scatter, function(d){return d[1]})])
          .range([svg3_padding,h - svg3_padding])
 
              svg3
@@ -156,11 +169,40 @@ var yScale = d3.scaleLinear()
              .append("circle")
              .attr("cx", function(d){ return xScale(d[0]);})
              .attr("cy", function(d){ return h -yScale(d[1] ) ;})
-             .attr("r", function(d){ return Math.sqrt(yScale(d[1]));})
+             .attr("r", function(d){ return (Math.sqrt(yScale(d[1])))/2;})
              .attr("fill", "green")
              .attr("stroke","blue");
 
+             svg3.selectAll("text")
+                 .data(dataset_scatter)
+                 .enter()
+                 .append("text")
+                 .text(function(d){return Math.round(d[1]);})
+                 .attr("x", function(d){ return xScale(d[0]) ;})
+                 .attr("y", function(d){ return h -yScale(d[1] ) -svg3_padding/2 ;});
+
+
+        var xAxis = d3.axisBottom()
+                      .scale(xScale)
+                      ;
+
+        var yAxis = d3.axisLeft()
+                      .scale(yScale)
+                      ;
+            
+            svg3.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(0,"+ (h-20 )+")")
+                .call(xAxis);
+
+            svg3.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate("+ 20+",0)")
+                .call(yAxis);
+
+
 </script>
+
 
 
 </body>
