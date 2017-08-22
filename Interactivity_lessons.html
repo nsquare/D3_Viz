@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang ='en'>
+<head>
+	<meta chartset='utf-8'>
+	<title> D3 template</title>
+	<script type="text/javascript" src = "https://d3js.org/d3.v4.min.js"></script>
+	<style type="text/css">
+		</style>
+</head>
+<body>
+<h4> Lesson 9 Onwards- Click! Click! here! here! </h4>
+
+<script type="text/javascript">
+
+d3.select("h4")
+  .on("click",function(){alert("Lets get started !")});
+
+var dataset = [];
+for( var i =0; i <25; i ++){
+	var newNum = Math.random()*30;
+	dataset.push(newNum)
+};
+
+var w = 500;
+var h = 200;
+var barPadding =2;
+
+var svg2 = d3.select("body")
+            .append("svg")
+            .attr("height", h)
+            .attr("width", w);
+
+svg2.style("background-color", "pink")
+   .selectAll("rect")
+   .data(dataset)
+   .enter()
+   .append("rect")
+   .attr("x", function(d,i){
+    return i*w/dataset.length
+   }
+   	)
+   .attr("y", function(d,i){
+   	return (h - d*5)}
+   	)
+   .attr("width", function(d,i){
+   	return w/dataset.length - barPadding}
+   	)
+   .attr("height", function(d,i){
+   	return d*5}
+   	)
+   .attr("fill", function(d) { return "rgb(0, 0, " + Math.round(h- (d * 7)) + ")"; } )
+   ;
+
+svg2.selectAll("rect")
+    .data(dataset)
+    .transition()
+    .duration(5000)
+       .attr("fill", function(d) { return "rgb(0, 100, " + Math.round(h- (d * 7)) + ")"; } )
+   ;
+  
+
+  svg2.selectAll("text")
+      .data(dataset)
+      .enter()
+      .append("text")
+      .text(function(d){return Math.round(d)})
+         .attr("x", function(d,i){
+    return i*w/dataset.length
+   }
+   	)
+   .attr("y", function(d,i){
+   	return (h - d*5)}
+   	);
+
+
+</script>
+</body>
