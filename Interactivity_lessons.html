@@ -5,6 +5,16 @@
 	<title> D3 template</title>
 	<script type="text/javascript" src = "https://d3js.org/d3.v4.min.js"></script>
 	<style type="text/css">
+	/*rect:hover{
+			fill: orange;
+		}
+	
+		rect {
+	        -moz-transition: all 0.25s;
+	        -o-transition: all 0.25s;
+	        -webkit-transition: all 0.25s;
+	        transition: all 0.25s;
+	        }" */
 		</style>
 </head>
 <body>
@@ -15,20 +25,31 @@
 d3.select("h4")
   .on("click",function(){alert("Lets get started !")});
 
+//Generate dataset
 var dataset = [];
 for( var i =0; i <25; i ++){
 	var newNum = Math.random()*30;
 	dataset.push(newNum)
 };
 
-var w = 500;
-var h = 200;
+// Padding parameters
+var w = 600;
+var h = 400;
 var barPadding =2;
+
+// Create SVG canvas
 
 var svg2 = d3.select("body")
             .append("svg")
             .attr("height", h)
             .attr("width", w);
+
+var svg3 = d3.select("body")
+            .append("svg")
+            .attr("height", h)
+            .attr("width", w);
+
+// Draw bars on svg canvas
 
 svg2.style("background-color", "pink")
    .selectAll("rect")
@@ -49,16 +70,27 @@ svg2.style("background-color", "pink")
    	return d*5}
    	)
    .attr("fill", function(d) { return "rgb(0, 0, " + Math.round(h- (d * 7)) + ")"; } )
+
+   .on("mouseover", function() { d3.select(this)
+                                   .attr("fill","orange")})
+   .on("mouseout", function(d) {
+    d3.select(this)
+      .transition()
+      .duration(250)
+      .attr("fill", "rgb(0, 0, " + Math.round(h- (d * 7)) + ")");
+       })
    ;
 
+// Create transition effect
 svg2.selectAll("rect")
     .data(dataset)
     .transition()
     .duration(5000)
-       .attr("fill", function(d) { return "rgb(0, 100, " + Math.round(h- (d * 7)) + ")"; } )
+ //      .attr("fill", function(d) { return "rgb(0, 100, " + Math.round(h- (d * 7)) + ")"; } )
+
    ;
   
-
+// Create labels
   svg2.selectAll("text")
       .data(dataset)
       .enter()
@@ -72,6 +104,79 @@ svg2.selectAll("rect")
    	return (h - d*5)}
    	);
 
+
+
+// Draw bars on svg canvas
+
+svg3.style("background-color", "pink")
+   .selectAll("rect")
+   .data(dataset)
+   .enter()
+   .append("rect")
+   .attr("x", function(d,i){
+    return i*w/dataset.length
+   }
+   	)
+   .attr("y", function(d,i){
+   	return (h - d*5)}
+   	)
+   .attr("width", function(d,i){
+   	return w/dataset.length - barPadding}
+   	)
+   .attr("height", function(d,i){
+   	return d*5}
+   	)
+   .attr("fill", function(d) { return "rgb(0, 0, " + Math.round(h- (d * 7)) + ")"; } )
+
+   .on("mouseover", function() { d3.select(this)
+                                   .attr("fill","orange")})
+   .on("mouseout", function(d) {
+    d3.select(this)
+      .transition()
+      .duration(250)
+      .attr("fill", "rgb(0, 0, " + Math.round(h- (d * 7)) + ")");
+       })
+    .on("click", function(){
+   	sortBars(svg3);
+   });
+
+
+var sortBars = function(svg_elem){
+	svg_elem.selectAll("rect")
+	   .sort(function(a,b){
+	   	return d3.ascending(a, b);
+	   })
+	   .transition()
+	   .duration(500)
+	   .attr("x", function(d, i) {
+	         return i*w/dataset.length
+	   });
+	svg_elem.selectAll("text")
+	   .sort(function(a,b){
+	   	return d3.ascending(a, b);
+	   })
+	   .transition()
+	   .duration(500)
+	   .attr("x", function(d, i) {
+	         return i*w/dataset.length
+	   });
+
+}
+   ;
+  
+// Create labels
+  svg3.selectAll("text")
+      .data(dataset)
+      .enter()
+      .append("text")
+      .text(function(d){return Math.round(d)})
+         .attr("x", function(d,i){
+    return i*w/dataset.length
+   }
+   	)
+   .attr("y", function(d,i){
+   	return (h - d*5)}
+   	);
 
 </script>
 </body>
